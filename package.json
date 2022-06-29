@@ -4,7 +4,7 @@
   "description": "Electron test repo",
   "main": "main.js",
   "scripts": {
-    "dev": "electron ."
+    "dev": "electron src/main.js"
   },
   "repository": {
     "type": "git",
