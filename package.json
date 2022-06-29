@@ -4,7 +4,7 @@
   "description": "Electron test repo",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "electron ."
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Freymaurer/electron-playground/issues"
   },
-  "homepage": "https://github.com/Freymaurer/electron-playground#readme"
+  "homepage": "https://github.com/Freymaurer/electron-playground#readme",
+  "devDependencies": {
+    "electron": "^19.0.6"
+  }
 }
