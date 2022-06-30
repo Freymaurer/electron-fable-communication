@@ -5,6 +5,7 @@ open Helpers
 
 initializeContext()
 
+let devUrl = "http://localhost:8080"
 let sharedPath = Path.getFullName "src/Shared"
 let serverPath = Path.getFullName "src/Server"
 let clientPath = Path.getFullName "src/Client"
@@ -12,6 +13,8 @@ let deployPath = Path.getFullName "deploy"
 let sharedTestsPath = Path.getFullName "tests/Shared"
 let serverTestsPath = Path.getFullName "tests/Server"
 let clientTestsPath = Path.getFullName "tests/Client"
+
+printfn "CLIENT: %A" clientPath
 
 Target.create "Clean" (fun _ ->
     Shell.cleanDir deployPath
@@ -28,8 +31,10 @@ Target.create "Bundle" (fun _ ->
     |> runParallel
 )
 
-Target.create "Run" (fun _ ->
+Target.create "Run" (fun config ->
+    let args = config.Context.Arguments
     run dotnet "build" sharedPath
+    if args |> List.contains "--open" then openBrowser devUrl
     [ "server", dotnet "watch run" serverPath
       "client", dotnet "fable watch -o output -s --run npm run start" clientPath ]
     |> runParallel
