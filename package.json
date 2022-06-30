@@ -2,10 +2,10 @@
   "name": "electron-playground",
   "version": "0.0.0",
   "description": "Electron test repo",
-  "main": "main.js",
   "scripts": {
-    "dev": "electron src/Desktop/main.js",
-    "start": "webpack-dev-server --mode development",
+    "start": "webpack --config ./webpack.config.js --mode development && webpack-dev-server --mode development",
+    "build-electron": "webpack --config ./webpack.config.js --mode development",
+    "dev": "electron src/Client/output/electron.js",
     "build": "webpack --mode production",
     "test:live": "webpack-dev-server --mode development --env test"
   },

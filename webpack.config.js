@@ -52,6 +52,23 @@ module.exports = [
         // environment variables docs: https://webpack.js.org/api/cli/#environment-options
         const config = env.test ? TEST_CONFIG : CONFIG;
         const isProduction = mode === 'production';
+
+        return {
+            mode: 'development',
+            entry: './src/Desktop/electron.js',
+            target: 'electron-main',
+            output: {
+              path: isProduction ? resolve(config.outputDir) : __dirname + '/src/Client/output',
+              filename: 'electron.js'
+            }
+        }
+    },
+    function(env, arg) {
+        // Mode is passed as a flag to npm run. see the docs for more details on flags https://webpack.js.org/api/cli/#flags
+        const mode = arg.mode ?? 'development';
+        // environment variables docs: https://webpack.js.org/api/cli/#environment-options
+        const config = env.test ? TEST_CONFIG : CONFIG;
+        const isProduction = mode === 'production';
     
         console.log(`Bundling for ${env.test ? 'test' : 'run'} - ${mode} ...`);
     

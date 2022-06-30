@@ -27,8 +27,9 @@ Target.create "electron" (fun _ -> run npm "run dev" "")
 
 Target.create "Bundle" (fun _ ->
     [ "server", dotnet $"publish -c Release -o \"{deployPath}\"" serverPath
-      "client", dotnet "fable -o output -s --run npm run build" clientPath ]
-    |> runParallel
+      "client", dotnet "fable -o output -s --run npm run build" clientPath
+    //   "electron", npm "run dev" "" 
+    ] |> runParallel
 )
 
 Target.create "Run" (fun config ->
@@ -36,8 +37,9 @@ Target.create "Run" (fun config ->
     run dotnet "build" sharedPath
     if args |> List.contains "--open" then openBrowser devUrl
     [ "server", dotnet "watch run" serverPath
-      "client", dotnet "fable watch -o output -s --run npm run start" clientPath ]
-    |> runParallel
+      "client", dotnet "fable watch -o output -s --run npm run start" clientPath 
+      "electron", npm "run dev" ""
+    ] |> runParallel
 )
 
 Target.create "RunTests" (fun _ ->
