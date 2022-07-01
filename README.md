@@ -25,6 +25,12 @@ dotnet run
 
 Then open `http://localhost:8080` in your browser.
 
+To run ElectronNET, use the following command in `src/Server`:
+
+```bash
+dotnet electronize start
+```
+
 The build project in root directory contains a couple of different build targets. You can specify them after `--` (target name is case-insensitive).
 
 To run concurrently server and client tests in watch mode (you can run this command in parallel to the previous one in new terminal):
