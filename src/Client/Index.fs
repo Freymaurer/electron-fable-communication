@@ -109,7 +109,7 @@ let view (model: Model) (dispatch: Msg -> unit) =
                         prop.children [
                             Bulma.title [
                                 text.hasTextCentered
-                                prop.text "New_folder"
+                                prop.text "electron_playground"
                             ]
                             containerBox model dispatch
                         ]

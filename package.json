@@ -1,45 +1,31 @@
 {
-  "name": "electron-playground",
-  "version": "0.0.0",
-  "description": "Electron test repo",
-  "productName": "electron-playground",
-  "main": "src/Desktop/electron.js",
-  "scripts": {
-    "start": "webpack --config ./webpack.config.js --mode development && webpack-dev-server --mode development",
-    "build-electron": "webpack --config ./webpack.config.js --mode development",
-    "dev": "electron src/Client/output/electron.js",
-    "build": "webpack --mode production",
-    "test:live": "webpack-dev-server --mode development --env test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Freymaurer/electron-playground.git"
-  },
-  "author": "Kevin Frey",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Freymaurer/electron-playground/issues"
-  },
-  "homepage": "https://github.com/Freymaurer/electron-playground#readme",
-  "dependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "devDependencies": {
-    "copy-webpack-plugin": "^10.0.0",
-    "css-loader": "^6.5.1",
-    "electron": "^19.0.6",
-    "electron-builder": "^23.1.0",
-    "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^5.5.0",
-    "mini-css-extract-plugin": "^2.4.5",
-    "remotedev": "^0.2.9",
-    "sass": "^1.43.4",
-    "sass-loader": "^12.3.0",
-    "source-map-loader": "^3.0.0",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.64.2",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.5.0"
-  }
+    "private": true,
+    "engines": {
+        "node": "~16",
+        "npm": "~8"
+    },
+    "scripts": {
+        "start": "webpack-dev-server --mode development",
+        "build": "webpack --mode production",
+        "test:live": "webpack-dev-server --mode development --env test"
+    },
+    "dependencies": {
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    },
+    "devDependencies": {
+        "copy-webpack-plugin": "^10.0.0",
+        "css-loader": "^6.5.1",
+        "file-loader": "^6.2.0",
+        "html-webpack-plugin": "^5.5.0",
+        "mini-css-extract-plugin": "^2.4.5",
+        "remotedev": "^0.2.9",
+        "sass": "^1.43.4",
+        "sass-loader": "^12.3.0",
+        "source-map-loader": "^3.0.0",
+        "style-loader": "^3.3.1",
+        "webpack": "^5.64.2",
+        "webpack-cli": "^4.9.1",
+        "webpack-dev-server": "^4.5.0"
+    }
 }
