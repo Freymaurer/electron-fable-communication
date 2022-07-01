@@ -2,6 +2,8 @@
   "name": "electron-playground",
   "version": "0.0.0",
   "description": "Electron test repo",
+  "productName": "electron-playground",
+  "main": "src/Desktop/electron.js",
   "scripts": {
     "start": "webpack --config ./webpack.config.js --mode development && webpack-dev-server --mode development",
     "build-electron": "webpack --config ./webpack.config.js --mode development",
@@ -22,10 +24,12 @@
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
-    },
+  },
   "devDependencies": {
     "copy-webpack-plugin": "^10.0.0",
     "css-loader": "^6.5.1",
+    "electron": "^19.0.6",
+    "electron-builder": "^23.1.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.4.5",
@@ -36,7 +40,6 @@
     "style-loader": "^3.3.1",
     "webpack": "^5.64.2",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.5.0",
-    "electron": "^19.0.6"
+    "webpack-dev-server": "^4.5.0"
   }
 }

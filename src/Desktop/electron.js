@@ -3,8 +3,8 @@ const path = require('path')
 
 const createWindow = () => {
     const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1200,
+        height: 800,
         webPreferences: {
             // The __dirname string points to the path of the currently executing script (in this case, your project's root folder).
             // The path.join API joins multiple path segments together, creating a combined path string that works across all platforms.
@@ -19,7 +19,7 @@ const createWindow = () => {
       } else {
         win.loadURL(
           url.format({
-              pathname: path.join(__dirname, '../index.html'),
+              pathname: path.join(__dirname, 'index.html'),
               protocol: 'file:',
               slashes: true
           })
