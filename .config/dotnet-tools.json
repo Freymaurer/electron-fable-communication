@@ -25,12 +25,6 @@
       "commands": [
         "femto"
       ]
-    },
-    "electronnet.cli": {
-      "version": "13.5.1",
-      "commands": [
-        "electronize"
-      ]
     }
   }
 }

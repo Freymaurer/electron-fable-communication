@@ -4,21 +4,33 @@ open Elmish
 open Fable.Remoting.Client
 open Shared
 
-type Model = { Todos: Todo list; Input: string }
+type Model = {
+    Todos: Todo list;
+    Input: string
+    IPC_On_Data: int
+}
+
+type ElectronData = {
+    data: int
+}
 
 type Msg =
     | GotTodos of Todo list
     | SetInput of string
     | AddTodo
     | AddedTodo of Todo
+    | UpdateIPC_On_Data of ElectronData
 
 let todosApi =
     Remoting.createApi ()
     |> Remoting.withRouteBuilder Route.builder
     |> Remoting.buildProxy<ITodosApi>
 
+open Fable.Core.JsInterop
+open Fable.Core.JS
+
 let init () : Model * Cmd<Msg> =
-    let model = { Todos = []; Input = "" }
+    let model = { Todos = []; Input = ""; IPC_On_Data = 0 }
 
     let cmd = Cmd.OfAsync.perform todosApi.getTodos () GotTodos
 
@@ -35,6 +47,9 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
 
         { model with Input = "" }, cmd
     | AddedTodo todo -> { model with Todos = model.Todos @ [ todo ] }, Cmd.none
+    | UpdateIPC_On_Data data ->
+        let nextModel = { model with IPC_On_Data = data.data }
+        nextModel, Cmd.none
 
 open Feliz
 open Feliz.Bulma
@@ -86,6 +101,73 @@ let containerBox (model: Model) (dispatch: Msg -> unit) =
         ]
     ]
 
+module IPC =
+
+    let inline invoke(ipcServiceName:string, arguments: 'a) : Promise<'b> = Browser.Dom.window?ipc?invoke(ipcServiceName, arguments)
+
+    let invokeType<'b>(ipcServiceName:string, arguments) : Promise<'b> = Browser.Dom.window?ipc?invoke(ipcServiceName, arguments)
+
+    let inline on(ipcServiceName:string, dataHandler: obj -> unit) : unit = Browser.Dom.window?ipc?on(ipcServiceName, dataHandler)
+
+    let inline onType<'b>(ipcServiceName:string, dataHandler: 'b -> unit) : unit =
+        Browser.Dom.console.log($"Registered handler for '{ipcServiceName}'")
+        Browser.Dom.window?ipc?on(ipcServiceName, dataHandler)
+
+
+let testBox (model: Model) (dispatch: Msg -> unit) =
+    Bulma.box [
+        Bulma.button.a [
+            prop.text "ipc"
+            prop.onClick(fun e ->
+                //let x = IPC.invokeType<int>("SomeService_test", 42).``then``(fun x -> Browser.Dom.console.log(x))
+                let x = Browser.Dom.window?ipc
+                Browser.Dom.console.log(x)
+                ()
+            )
+        ]
+        Bulma.button.a [
+            prop.text """ipc.invoke!"""
+            prop.onClick(fun e ->
+                let x = IPC.invokeType<int>("SomeService_test", 42)
+                Browser.Dom.console.log(x)
+                ()
+            )
+        ]
+        Bulma.button.a [
+            prop.text """ipc.invoke...then!"""
+            //prop.text """ipc.invoke("SomeService_test", 42).then...console.log!"""
+            prop.onClick(fun e ->
+                //let x = IPC.invokeType<int>("SomeService_test", 42).``then``(fun x -> Browser.Dom.console.log(x))
+                let x = IPC.invokeType<int>("SomeService_test", 42).``then``(fun x -> Browser.Dom.console.log(x))
+                Browser.Dom.console.log(x)
+                ()
+            )
+        ]
+    ]
+
+let pingpongBox (model: Model) (dispatch: Msg -> unit) =
+    Bulma.box [
+        // // only for manually registering handler. This should be done via subscription in App.fs
+        //Bulma.button.a [
+        //    prop.text "register"
+        //    prop.onClick(fun e ->
+        //        //let x = IPC.invokeType<int>("SomeService_test", 42).``then``(fun x -> Browser.Dom.console.log(x))
+        //        let x = IPC.on("some-message-from-server", fun msg -> Browser.Dom.console.log(msg) )
+        //        Browser.Dom.console.log(x)
+        //        ()
+        //    )
+        //]
+        Bulma.button.a [
+            prop.text "pingpong"
+            prop.onClick(fun e ->
+                //let x = IPC.invokeType<int>("SomeService_test", 42).``then``(fun x -> Browser.Dom.console.log(x))
+                let x = IPC.invoke("some-message-from-renderer", 55).``then``(fun x -> Browser.Dom.console.log(x))
+                Browser.Dom.console.log(x)
+                ()
+            )
+        ]
+    ]
+
 let view (model: Model) (dispatch: Msg -> unit) =
     Bulma.hero [
         hero.isFullHeight
@@ -109,9 +191,11 @@ let view (model: Model) (dispatch: Msg -> unit) =
                         prop.children [
                             Bulma.title [
                                 text.hasTextCentered
-                                prop.text "electron_playground"
+                                prop.text "electron_test2"
                             ]
                             containerBox model dispatch
+                            testBox model dispatch
+                            pingpongBox model dispatch
                         ]
                     ]
                 ]
