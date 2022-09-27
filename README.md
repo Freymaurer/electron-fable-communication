@@ -1,3 +1,7 @@
+**This does currently not work!**
+
+I tried to follow the steps shown [here](https://github.com/DieselMeister/safe-stack-electron-net-example) for the newest SAFE stack version, but it didn't work out yet.
+
 # SAFE Template
 
 This template can be used to generate a full-stack web application using the [SAFE Stack](https://safe-stack.github.io/). It was created using the dotnet [SAFE Template](https://safe-stack.github.io/docs/template-overview/). If you want to learn more about the template why not start with the [quick start](https://safe-stack.github.io/docs/quickstart/) guide?
