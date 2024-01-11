@@ -1,17 +1,74 @@
-**This does currently not work!**
+# SAFE-electron interop
 
-I tried to follow the steps shown [here](https://github.com/DieselMeister/safe-stack-electron-net-example) for the newest SAFE stack version, but it didn't work out yet.
+In one of our projects electron needs to communicate with an SAFE stack hosted in a iframe in the renderer. This project prototypes how such a setup might look like.
 
-# SAFE Template
+## How does the responding part in electron look?
 
-This template can be used to generate a full-stack web application using the [SAFE Stack](https://safe-stack.github.io/). It was created using the dotnet [SAFE Template](https://safe-stack.github.io/docs/template-overview/). If you want to learn more about the template why not start with the [quick start](https://safe-stack.github.io/docs/quickstart/) guide?
+This is done in the renderer part of a vue electron app.
+
+```ts
+<script lang="ts" setup>
+import { BrowserView } from 'electron';
+import { reactive, onMounted, watch, ref } from 'vue';
+
+let iframe: any | HTMLElement = ref({})
+
+enum Msg {
+  InitResponse,
+  Error
+}
+
+interface Message {
+  swate: boolean;
+  api: string;
+  data: any;
+}
+
+type MessageHandler = (data: any) => void;
+
+interface SwateAPI {
+  handleEvent: (e: MessageEvent) => void;
+  [key: string]: MessageHandler;
+}
+
+const send = (msg: Msg, data: any = null): void => {
+  const toSwate = (data: any): void => {
+    const methodName = Msg[msg];
+    const content: Message = {swate: true, api: methodName, data: data }
+    iframe.value.contentWindow?.postMessage(content, '*');
+  };
+  switch (msg) {
+    case Msg.InitResponse:
+      toSwate("Hello from ARCitect!");
+      break;
+    case Msg.Error:
+      toSwate(data);
+      break;
+    // Add more cases as needed
+  }
+};
+
+const SwateAPI : SwateAPI = {
+  handleEvent: (e: MessageEvent) => {
+    if (e.data.swate) {
+      const apiHandler = SwateAPI[e.data.api];
+      apiHandler(e.data.data);
+    }
+  },
+  Init: (msg: string) => {
+    console.log(msg)
+    send(Msg.InitResponse)
+  }
+}
+```
 
 ## Install pre-requisites
 
 You'll need to install the following pre-requisites in order to build SAFE applications
 
-* [.NET Core SDK](https://www.microsoft.com/net/download) 6.0 or higher
-* [Node 16](https://nodejs.org/en/download/)
+* [.NET Core SDK](https://www.microsoft.com/net/download) 8.0 or higher
+* [Node 18](https://nodejs.org/en/download/) or higher
+* [NPM 9](https://www.npmjs.com/package/npm) or higher
 
 ## Starting the application
 
@@ -45,13 +102,3 @@ Finally, there are `Bundle` and `Azure` targets that you can use to package your
 dotnet run -- Bundle
 dotnet run -- Azure
 ```
-
-## SAFE Stack Documentation
-
-If you want to know more about the full Azure Stack and all of it's components (including Azure) visit the official [SAFE documentation](https://safe-stack.github.io/docs/).
-
-You will find more documentation about the used F# components at the following places:
-
-* [Saturn](https://saturnframework.org/)
-* [Fable](https://fable.io/docs/)
-* [Elmish](https://elmish.github.io/elmish/)
